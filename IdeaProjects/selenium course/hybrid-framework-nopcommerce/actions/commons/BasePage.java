@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 public class BasePage {
-    // Open URL for 1 page
+    public static BasePage getBasePage(){
+        return new BasePage();
+    }
     public void openPageURL(WebDriver driver, String pageUrl) {
         driver.get(pageUrl);
     }

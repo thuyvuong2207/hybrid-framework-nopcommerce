@@ -4,7 +4,7 @@
     <test verbose="2" preserve-order="true"
           name="Run on Chrome">
         <classes>
-            <class name="com.nopcommerce.account.Account_01_Register">
+            <class name="com.nopcommerce.account.Level_01_DRY">
                 <methods>
                     <include name="Register_01_Empty_Data"/>
                     <include name="Register_02_Invalid_Email"/>
