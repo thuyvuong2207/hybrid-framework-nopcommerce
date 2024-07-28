@@ -7,27 +7,30 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pageObjects.HomePageObject;
+import pageObjects.RegisterPageObject;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
-public class Level_01_Page_Object extends BasePage {
+public class Level_02_Page_Object extends BasePage {
     private WebDriver driver;
     private String projectPath = System.getProperty("user.dir");
+    private HomePageObject homePage;
+    private RegisterPageObject registerPage;
 
 
     @BeforeClass
     public void BeforeClass() {
         driver = new ChromeDriver();
-        driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        openPageURL(driver, "https://demo.nopcommerce.com/");
+        homePage = new HomePageObject(driver);
     }
 
     @Test
     public void User_01_Register_Empty_Data() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
-
         clickToElement(driver, "//a[@class='ico-register']");
         clickToElement(driver, "//button[@id='register-button']");
 
@@ -39,7 +42,6 @@ public class Level_01_Page_Object extends BasePage {
 
     @Test
     public void User_02_Register_Invalid_Email() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -54,7 +56,6 @@ public class Level_01_Page_Object extends BasePage {
 
     @Test
     public void User_03_Register_Invalid_Password() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -69,7 +70,6 @@ public class Level_01_Page_Object extends BasePage {
 
     @Test
     public void User_04_Register_Incorrect_Confirm_Password() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -84,7 +84,6 @@ public class Level_01_Page_Object extends BasePage {
 
     @Test
     public void User_05_Register_Success() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -96,6 +95,7 @@ public class Level_01_Page_Object extends BasePage {
         clickToElement(driver, "//button[@id='register-button']");
         Assert.assertEquals(getElementText(driver, "//div[@class='result']"), "Your registration completed");
     }
+
     @Test
     public void User_06_Login_Success() {
 

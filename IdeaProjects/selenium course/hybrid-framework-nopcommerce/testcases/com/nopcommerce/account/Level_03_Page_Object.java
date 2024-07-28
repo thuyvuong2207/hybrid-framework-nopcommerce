@@ -7,54 +7,63 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pageObjects.HomePageObject;
+import pageObjects.RegisterPageObject;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
-public class Level_01_Page_Object extends BasePage {
+public class Level_03_Page_Object extends BasePage {
     private WebDriver driver;
     private String projectPath = System.getProperty("user.dir");
+    private HomePageObject homePage;
+    private RegisterPageObject registerPage;
+    private String emailAddress = getEmailRandom();
 
 
     @BeforeClass
     public void BeforeClass() {
         driver = new ChromeDriver();
-        driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        openPageURL(driver, "https://demo.nopcommerce.com/");
+        homePage = new HomePageObject(driver);
     }
 
     @Test
     public void User_01_Register_Empty_Data() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
+        homePage.clickToRegisterLink();
 
-        clickToElement(driver, "//a[@class='ico-register']");
-        clickToElement(driver, "//button[@id='register-button']");
+        registerPage = new RegisterPageObject();
+        registerPage.clickToRegisterButton();
+        Assert.assertEquals(registerPage.getFirstNameErrorMsgText(), "First name is required.");
+        Assert.assertEquals(registerPage.getLastNameErrorMsgText(), "Last name is required.");
+        Assert.assertEquals(registerPage.getEmailErrorMsgText(), "Email is required.");
+        Assert.assertEquals(registerPage.getPasswordErrorMsgText(), "Password is required.");
+        Assert.assertEquals(registerPage.getConfirmPasswordErrorMsgText(), "First name is required.");
 
-        Assert.assertEquals(getElementText(driver, "//span[@id='FirstName-error']"), "First name is required.");
-        Assert.assertEquals(getElementText(driver, "//span[@id='LastName-error']"), "Last name is required.");
-        Assert.assertEquals(getElementText(driver, "//span[@id='Email-error']"), "Email is required.");
-        Assert.assertEquals(getElementText(driver, "//span[@id='ConfirmPassword-error']"), "Password is required.");
     }
 
     @Test
     public void User_02_Register_Invalid_Email() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
-        clickToElement(driver, "//a[@class='ico-register']");
+        registerPage.clickNopCommerceLogo();
 
-        sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
-        sendkeyToElement(driver, "//input[@id='LastName']", "Vuong");
-        sendkeyToElement(driver, "//input[@id='Email']", "thuyvm@jj@");
-        sendkeyToElement(driver, "//input[@id='Password']", "123456789");
-        sendkeyToElement(driver, "//input[@id='ConfirmPassword']", "123456789");
+        homePage = new HomePageObject(driver);
 
-        clickToElement(driver, "//button[@id='register-button']");
-        Assert.assertEquals(getElementText(driver, "//span[@id='Email-error']"), "Wrong email");
+        homePage.clickToRegisterLink();
+        registerPage = new RegisterPageObject();
+        registerPage.enterToFirstNameTextbox("Thuy");
+        registerPage.enterToLastNameTextbox("Vuong");
+        registerPage.enterToEmailTextbox("thuyvm@gm@");
+        registerPage.enterToPasswordTextbox("12345678");
+        registerPage.enterToConfirmPasswordTextbox("12345678");
+
+        registerPage.clickToRegisterButton();
+        Assert.assertEquals(registerPage.getEmailErrorMsgText(), "Wrong email");
     }
 
     @Test
     public void User_03_Register_Invalid_Password() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -69,7 +78,6 @@ public class Level_01_Page_Object extends BasePage {
 
     @Test
     public void User_04_Register_Incorrect_Confirm_Password() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -84,7 +92,6 @@ public class Level_01_Page_Object extends BasePage {
 
     @Test
     public void User_05_Register_Success() {
-        openPageURL(driver, "https://demo.nopcommerce.com/");
         clickToElement(driver, "//a[@class='ico-register']");
 
         sendkeyToElement(driver, "//input[@id='FirstName']", "Thuy");
@@ -96,6 +103,7 @@ public class Level_01_Page_Object extends BasePage {
         clickToElement(driver, "//button[@id='register-button']");
         Assert.assertEquals(getElementText(driver, "//div[@class='result']"), "Your registration completed");
     }
+
     @Test
     public void User_06_Login_Success() {
 
