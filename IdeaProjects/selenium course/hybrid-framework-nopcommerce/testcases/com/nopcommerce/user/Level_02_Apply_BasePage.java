@@ -15,6 +15,6 @@ public class Level_02_Apply_BasePage {
     public void BeforeClass() {
         driver = new ChromeDriver();
 
-        emailAddress = "afc"  +
+//        emailAddress = "afc"  +
     }
 }

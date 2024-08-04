@@ -96,14 +96,14 @@ public class BasePage {
         }
     }
 
+    public By getByXpath(String xpathLocator) {
+        return By.xpath(xpathLocator);
+    }
     public WebElement getWebElement(WebDriver driver, String xpathLocator) {
-        return driver.findElement(By.xpath(xpathLocator));
+        return driver.findElement(getByXpath(xpathLocator));
     }
     public List<WebElement> getListWebElement(WebDriver driver, String xpathLocator) {
         return driver.findElements(By.xpath(xpathLocator));
-    }
-    public By getByXpath(String locator) {
-        return By.xpath(locator);
     }
 
     public void clickToElement(WebDriver driver, String xpathLocator) {
@@ -116,8 +116,8 @@ public class BasePage {
         element.sendKeys(textValue);
     }
 
-    public void getElementText(WebDriver driver, String xpathLocator, String textValue) {
-        getWebElement(driver, xpathLocator).sendKeys(textValue);
+    public String getElementText(WebDriver driver, String xpathLocator) {
+        return getWebElement(driver, xpathLocator).getText();
     }
 
     public void selectItemInDefaultDropdown(WebDriver driver, String xpathLocator, String textItem) {
