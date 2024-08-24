@@ -1,24 +1,21 @@
 package com.nopcommerce.account;
 
-import commons.BasePage;
+import com.beust.jcommander.Parameter;
+import commons.BaseTest;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import pageObjects.CustomerPageObject;
 import pageObjects.HomePageObject;
 import pageObjects.LoginPageObject;
 import pageObjects.RegisterPageObject;
-import pageUIs.HomePageUI;
-import pageUIs.RegisterPageUI;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-
-public class Level_03_Page_Object {
+public class Level_04_Multiple_Browsers extends BaseTest {
     private WebDriver driver;
     private String projectPath = System.getProperty("user.dir");
     private HomePageObject homePage;
@@ -29,12 +26,10 @@ public class Level_03_Page_Object {
 
     private String emailAddress = getEmailRandom();
 
-
+    @Parameters("browser")
     @BeforeClass
-    public void BeforeClass() {
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        openPageURL(driver, "https://demo.nopcommerce.com/");
+    public void BeforeClass(String browserName) {
+        driver = getBrowserDriver(browserName);
         homePage = new HomePageObject(driver);
     }
 
