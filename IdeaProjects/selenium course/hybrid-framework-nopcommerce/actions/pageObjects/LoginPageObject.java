@@ -1,6 +1,7 @@
 package pageObjects;
 
 import commons.BasePage;
+import commons.PageGeneratorManager;
 import org.openqa.selenium.WebDriver;
 import pageUIs.HomePageUI;
 import pageUIs.LoginPageUI;
@@ -22,8 +23,9 @@ public class LoginPageObject extends BasePage {
         sendkeyToElement(driver, LoginPageUI.PASSWORD_TEXTBOX, password);
     }
 
-    public void clickToLoginButton() {
+    public HomePageObject clickToLoginButton() {
         waitForElementClickable(driver, LoginPageUI.LOGIN_BUTTON);
         clickToElement(driver, LoginPageUI.LOGIN_BUTTON);
+        return PageGeneratorManager.getHomePage(driver);
     }
 }

@@ -14,7 +14,7 @@ import pageObjects.RegisterPageObject;
 
 import java.util.Random;
 
-public class Level_04_Multiple_Browsers extends BaseTest {
+public class Level_07_Page_Manager_1 extends BaseTest {
     private WebDriver driver;
     private String projectPath = System.getProperty("user.dir");
     private HomePageObject homePage;

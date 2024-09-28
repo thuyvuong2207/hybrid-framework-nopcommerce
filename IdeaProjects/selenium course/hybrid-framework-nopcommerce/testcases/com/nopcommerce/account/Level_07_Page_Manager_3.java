@@ -1,6 +1,7 @@
 package com.nopcommerce.account;
 
 import commons.BaseTest;
+import commons.PageGeneratorManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -14,7 +15,7 @@ import pageObjects.RegisterPageObject;
 
 import java.util.Random;
 
-public class Level_04_Multiple_Browsers extends BaseTest {
+public class Level_07_Page_Manager_3 extends BaseTest {
     private WebDriver driver;
     private String projectPath = System.getProperty("user.dir");
     private HomePageObject homePage;
@@ -22,21 +23,19 @@ public class Level_04_Multiple_Browsers extends BaseTest {
     private LoginPageObject loginPage;
     private CustomerPageObject customerPage;
 
-
     private String emailAddress = getEmailRandom();
 
     @Parameters("browser")
     @BeforeClass
     public void BeforeClass(String browserName) {
         driver = getBrowserDriver(browserName);
-        homePage = new HomePageObject(driver);
+        PageGeneratorManager.getHomePage(driver);
     }
 
     @Test
     public void User_01_Register_Empty_Data() {
-        homePage.clickToRegisterLink();
+        registerPage = homePage.clickToRegisterLink();
 
-        registerPage = new RegisterPageObject(driver);
         registerPage.clickToRegisterButton();
         Assert.assertEquals(registerPage.getFirstNameErrorMsgText(), "First name is required.");
         Assert.assertEquals(registerPage.getLastNameErrorMsgText(), "Last name is required.");
@@ -47,11 +46,10 @@ public class Level_04_Multiple_Browsers extends BaseTest {
 
     @Test
     public void User_02_Register_Invalid_Email() {
-        registerPage.clickNopCommerceLogo();
-        homePage = new HomePageObject(driver);
+        homePage = registerPage.clickNopCommerceLogo();
 
-        homePage.clickToRegisterLink();
-        registerPage = new RegisterPageObject(driver);
+        registerPage= homePage.clickToRegisterLink();
+
         registerPage.enterToFirstNameTextbox("Thuy");
         registerPage.enterToLastNameTextbox("Vuong");
         registerPage.enterToEmailTextbox("thuyvm@gm@");
@@ -64,12 +62,10 @@ public class Level_04_Multiple_Browsers extends BaseTest {
 
     @Test
     public void User_03_Register_Invalid_Password() {
-        registerPage.clickNopCommerceLogo();
-        homePage = new HomePageObject(driver);
+        homePage = registerPage.clickNopCommerceLogo();
 
-        homePage.clickToRegisterLink();
+        registerPage = homePage.clickToRegisterLink();
 
-        registerPage = new RegisterPageObject(driver);
         registerPage.enterToFirstNameTextbox("Thuy");
         registerPage.enterToLastNameTextbox("Vuong");
         registerPage.enterToEmailTextbox("thuyvm@gm@");
@@ -82,12 +78,10 @@ public class Level_04_Multiple_Browsers extends BaseTest {
 
     @Test
     public void User_04_Register_Incorrect_Confirm_Password() {
-        registerPage.clickNopCommerceLogo();
-        homePage = new HomePageObject(driver);
+        homePage = registerPage.clickNopCommerceLogo();
 
-        homePage.clickToRegisterLink();
+        registerPage = homePage.clickToRegisterLink();
 
-        registerPage = new RegisterPageObject(driver);
         registerPage.enterToFirstNameTextbox("Thuy");
         registerPage.enterToLastNameTextbox("Vuong");
         registerPage.enterToEmailTextbox("thuyvm@gm@");
@@ -100,12 +94,10 @@ public class Level_04_Multiple_Browsers extends BaseTest {
 
     @Test
     public void User_05_Register_Success() {
-        registerPage.clickNopCommerceLogo();
-        homePage = new HomePageObject(driver);
+        homePage = registerPage.clickNopCommerceLogo();
 
-        homePage.clickToRegisterLink();
+        registerPage = homePage.clickToRegisterLink();
 
-        registerPage = new RegisterPageObject(driver);
         registerPage.enterToFirstNameTextbox("Thuy");
         registerPage.enterToLastNameTextbox("Vuong");
         registerPage.enterToEmailTextbox(emailAddress);
@@ -118,12 +110,15 @@ public class Level_04_Multiple_Browsers extends BaseTest {
 
     @Test
     public void User_06_Login_Success() {
-        registerPage.clickNopCommerceLogo();
-        homePage = new HomePageObject(driver);
+        homePage = registerPage.clickNopCommerceLogo();
 
-        homePage.clickToMyAccountLink();
+        loginPage = homePage.clickToLoginLink();
 
-        customerPage = new CustomerPageObject(driver);
+        loginPage.enterToEmailTextbox(emailAddress);
+        loginPage.enterToPasswordTextbox("123456789");
+        homePage = loginPage.clickToLoginButton();
+
+        customerPage = homePage.clickToMyAccountLink();
 
         Assert.assertEquals(customerPage.getFirstNameTextboxAttributeValue(),"Thuy");
         Assert.assertEquals(customerPage.getLastNameTextboxAttributeValue(),"Vuong");
